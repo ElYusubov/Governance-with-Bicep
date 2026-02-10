@@ -5,7 +5,7 @@ param tagName string = 'Environment'
 
 @allowed([ 'audit', 'deny' ])
 @description('Policy effect')
-param effect string = 'deny'
+param effect string = 'audit'
 
 @description('Policy name')
 param policyName string = 'require-tag-policy-03'
