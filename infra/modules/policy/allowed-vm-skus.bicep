@@ -42,13 +42,13 @@ resource policyDef 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
       }
     }
     policyRule: {
-      'if': {
-        'anyOf': [
-          { 'allOf': [ { 'field': 'type', 'equals': 'Microsoft.Compute/virtualMachines' }, { 'field': 'Microsoft.Compute/virtualMachines/sku.name', 'notIn': '[parameters(\'listOfAllowedSKUs\')]' } ] }
-          { 'allOf': [ { 'field': 'type', 'equals': 'Microsoft.Compute/virtualMachineScaleSets' }, { 'field': 'Microsoft.Compute/virtualMachineScaleSets/sku.name', 'notIn': '[parameters(\'listOfAllowedSKUs\')]' } ] }
+      if: {
+        anyOf: [
+          { allOf: [ { field: 'type', equals: 'Microsoft.Compute/virtualMachines' }, { field: 'Microsoft.Compute/virtualMachines/sku.name', notIn: '[parameters(\'listOfAllowedSKUs\')]' } ] }
+          { allOf: [ { field: 'type', equals: 'Microsoft.Compute/virtualMachineScaleSets' }, { field: 'Microsoft.Compute/virtualMachineScaleSets/sku.name', notIn: '[parameters(\'listOfAllowedSKUs\')]' } ] }
         ]
       }
-      'then': { 'effect': '[parameters(\'effect\')]' }
+      then: { effect: '[parameters(\'effect\')]' }
     }
   }
 }

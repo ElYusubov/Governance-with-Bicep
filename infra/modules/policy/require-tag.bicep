@@ -22,8 +22,8 @@ resource policyDef 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
     description: 'Ensures resources include the required tag or flags when missing.'
     metadata: { category: 'Tags' }
     policyRule: {
-      'if': { 'field': 'tags[\'${tagName}\']', 'exists': 'false' }
-      'then': { 'effect': effect }
+      if: { field: 'tags[\'${tagName}\']', exists: 'false' }
+      then: { effect: effect }
     }
   }
 }
