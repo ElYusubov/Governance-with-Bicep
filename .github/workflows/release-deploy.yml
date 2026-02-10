@@ -1,6 +1,8 @@
 name: Release Deploy (Main)
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [ main ]
     paths:
@@ -11,7 +13,7 @@ permissions:
   contents: read
 
 env:
-  DEPLOY_REGION: eastus
+  DEPLOY_REGION: eastus2
 
 jobs:
   deploy:
