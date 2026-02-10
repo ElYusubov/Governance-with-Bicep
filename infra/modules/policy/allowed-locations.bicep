@@ -21,8 +21,8 @@ resource policyDef 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
     displayName: 'Allowed locations (parameterized)'
     metadata: { category: 'General' }
     policyRule: {
-      'if': { 'not': { 'field': 'location', 'in': allowedLocations } }
-      'then': { 'effect': effect }
+      if: { not: { field: 'location', in: allowedLocations } }
+      then: { effect: effect }
     }
   }
 }
