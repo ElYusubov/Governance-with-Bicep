@@ -1,0 +1,34 @@
+name: PR Validate (Bicep & Policy)
+
+on:
+  pull_request:
+    paths:
+      - 'infra/**'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Bicep compile (sanity + linter)
+        run: az bicep build --file infra/main.bicep
+
+      - name: What-If (subscription deployment)
+        run: |
+          az deployment sub what-if             --template-file infra/main.bicep             --location eastus
+
+      - name: Compliance snapshot
+        run: az policy state summarize --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
