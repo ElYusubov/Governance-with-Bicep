@@ -1,0 +1,5 @@
+
+{
+  "format": { "indentation": 2 },
+  "analyzers": { "core": { "enabled": true, "verbose": false } }
+}
