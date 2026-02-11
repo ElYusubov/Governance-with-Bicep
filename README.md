@@ -1,6 +1,6 @@
 # Governance-w-Bicep
 
-Policy-as-Code starter repo for **Azure Governance** using **Bicep** and **GitHub Actions** with **OIDC**.
+Welcome to Policy-as-Code starter repo for **Azure Governance** using **Bicep** and **GitHub Actions** with **OIDC**.
 
 ## What You'll Learn
 - Define Azure Policy guardrails as reusable **Bicep modules**
