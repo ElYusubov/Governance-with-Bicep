@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
 @description('Resource ID of the target Log Analytics workspace')
-param logAnalyticsWorkspaceId string = '41ec1d49-6147-4367-924f-00ac9b771345'
+param logAnalyticsWorkspaceId string
 
 @allowed([ 'auditIfNotExists', 'deployIfNotExists' ])
 @description('Effect to use for enforcing diagnostics')
