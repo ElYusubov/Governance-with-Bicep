@@ -39,6 +39,9 @@ az deployment sub what-if   --template-file infra/main.bicep   --location eastus
 # Deploy (starts with audit)
 az deployment sub create   --template-file infra/main.bicep   --location eastus2
 
+az deployment sub create --template-file infra/main.bicep --parameters infra/params/sub.dev.json --location eastus2
+
+
 # Check compliance
 az policy state summarize --subscription <SUB_ID>
 ```

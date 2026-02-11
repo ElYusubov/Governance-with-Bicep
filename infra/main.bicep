@@ -5,7 +5,7 @@ module requireTag './modules/policy/require-tag.bicep' = {
   name: 'require-tag-environment'
   params: {
     tagName: 'Environment'
-    effect: 'deny'
+    effect: 'audit'
   }
 }
 
@@ -28,7 +28,7 @@ module allowedVmSkus './modules/policy/allowed-vm-skus.bicep' = {
 
 // Optional: Storage Diagnostics to Log Analytics (set workspaceId to enable)
 @description('Resource ID of Log Analytics Workspace; leave empty to skip deploying diagnostics policy')
-param logAnalyticsWorkspaceId string = ''
+param logAnalyticsWorkspaceId string
 
 module storageDiagnostics './modules/policy/storage-diagnostics.bicep' = if (logAnalyticsWorkspaceId != '') {
   name: 'storage-diagnostics'
