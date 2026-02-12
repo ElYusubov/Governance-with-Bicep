@@ -5,7 +5,7 @@ module requireTag './modules/policy/require-tag.bicep' = {
   name: 'require-tag-environment'
   params: {
     tagName: 'Environment'
-    effect: 'audit'
+    effect: 'deny'
   }
 }
 
