@@ -1,4 +1,4 @@
-# Governance-w-Bicep
+# Governance-with-Bicep
 
 Welcome to Policy-as-Code starter repo for **Azure Governance** using **Bicep** and **GitHub Actions** with **OIDC**.
 
