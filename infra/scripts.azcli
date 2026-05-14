@@ -1,0 +1,15 @@
+# Login to Azure
+az login --use-device-code
+az account show --query name
+
+# Set the subscription
+az account set --subscription 'MVP-Subscription-07'
+az group list -o table
+
+
+# Create the resource group and list them in a view
+az group create -n 'm365dc-bicep-demo' -l 'eastus2'  
+az group list -o table
+
+# Deploy Policy Definitions to subscription
+az deployment sub create --location eastus2 --template-file .\infra\samples\3-deploy-storage-w-Lock.bicep  -c
