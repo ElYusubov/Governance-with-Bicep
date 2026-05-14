@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
 @description('Allowed locations list')
-param allowedLocations array = ['eastus', 'eastus2', 'westus', 'westus2']
+param allowedLocations array
 
 @allowed([ 'audit', 'deny' ])
 @description('Policy effect')

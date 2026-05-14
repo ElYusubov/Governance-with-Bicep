@@ -4,10 +4,10 @@
 targetScope = 'subscription'
 
 @description('Resource group name.')
-param resourceGroupName string // = 'cll-storage-eastus2-demo'
+param resourceGroupName string
 
 @description('Azure region selection.')
-param azureRegion string = 'eastus2' 
+param azureRegion string
 
 var tag = {
   Project: 'Session Demo'

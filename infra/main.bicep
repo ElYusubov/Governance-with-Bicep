@@ -5,14 +5,14 @@ module requireTag './modules/policy/require-tag.bicep' = {
   name: 'require-tag-environment'
   params: {
     tagName: 'Environment'
-    effect: 'deny'
+    effect: 'audit'
   }
 }
 
 module allowedLocations './modules/policy/allowed-locations.bicep' = {
   name: 'allowed-locations'
   params: {
-    allowedLocations: [ 'eastus2', 'westus2' ]
+    allowedLocations: [ 'eastus', 'eastus2', 'westus', 'westus2' ]
     effect: 'audit'
   }
 }
