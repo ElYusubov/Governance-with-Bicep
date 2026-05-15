@@ -38,3 +38,10 @@ module storageDiagnostics './modules/policy/storage-diagnostics.bicep' = if (log
     diagnosticSettingName: 'storage-to-law'
   }
 }
+
+module storageAccessControls './modules/policy/storage-access-controls.bicep' = {
+  name: 'storage-access-controls'
+  params: {
+    effect: 'audit'
+  }
+}

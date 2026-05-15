@@ -1,4 +1,5 @@
 # Login to Azure
+
 az login --use-device-code
 az account show --query name
 
