@@ -27,7 +27,7 @@
 ## Developer workflows
 - Local preview: az deployment sub what-if --template-file infra/main.bicep --location eastus2
 - Local deploy: az deployment sub create --template-file infra/main.bicep --location eastus2
-- Compliance snapshot: az policy state summarize --subscription <SUB_ID>
+- Compliance snapshot: az policy state summarize
 
 ## CI/CD conventions
 - PR validation runs Bicep build, subscription what-if, and compliance snapshot (see .github/workflows/pr-validate.yml).
