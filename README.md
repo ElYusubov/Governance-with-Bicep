@@ -18,8 +18,11 @@ infra/
       allowed-locations.bicep
       allowed-vm-skus.bicep
       storage-diagnostics.bicep
+      storage-param.bicep
   params/
     sub.dev.json
+  samples/
+    3-deploy-storage-w-Lock.bicep
 .github/
   workflows/
     pr-validate.yml
@@ -43,7 +46,7 @@ az deployment sub create --template-file infra/main.bicep --parameters infra/par
 
 
 # Check compliance
-az policy state summarize --subscription <SUB_ID>
+az policy state summarize
 ```
 
 ## Demonstration Flow
