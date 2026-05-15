@@ -8,7 +8,7 @@ param allowedSkus array
 param effect string = 'Audit'
 
 @description('Policy name')
-param policyName string = 'allowed-vm-skus-policy-03'
+param policyName string = 'allowed-vm-skus-policy-14'
 
 @description('Assignment name')
 param assignmentName string = '${policyName}-assignment'

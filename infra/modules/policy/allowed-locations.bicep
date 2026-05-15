@@ -8,7 +8,7 @@ param allowedLocations array
 param effect string = 'audit'
 
 @description('Policy name')
-param policyName string = 'allowed-locations-policy-03'
+param policyName string = 'allowed-locations-policy-14'
 
 @description('Assignment name')
 param assignmentName string = '${policyName}-assignment'
@@ -30,7 +30,7 @@ resource policyDef 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
 resource assignment 'Microsoft.Authorization/policyAssignments@2022-06-01' = {
   name: assignmentName
   properties: {
-    displayName: 'Allowed locations assignment'
+    displayName: 'Allowed locations (assignment)'
     policyDefinitionId: policyDef.id
   }
 }

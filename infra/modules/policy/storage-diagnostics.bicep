@@ -8,10 +8,10 @@ param logAnalyticsWorkspaceId string
 param effect string = 'auditIfNotExists'
 
 @description('Name for the diagnostic setting that will be created when enforcing')
-param diagnosticSettingName string = 'storage-to-law-03'
+param diagnosticSettingName string = 'storage-to-law'
 
 @description('Policy name')
-param policyName string = 'storage-diagnostics-policy'
+param policyName string = 'storage-diagnostics-policy-14'
 
 @description('Assignment name')
 param assignmentName string = '${policyName}-assignment'

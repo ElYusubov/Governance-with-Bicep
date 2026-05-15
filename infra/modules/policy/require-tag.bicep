@@ -8,7 +8,7 @@ param tagName string = 'Environment'
 param effect string
 
 @description('Policy name')
-param policyName string = 'require-tag-policy-03'
+param policyName string = 'require-tag-policy-14'
 
 @description('Assignment name')
 param assignmentName string = '${policyName}-assignment'
