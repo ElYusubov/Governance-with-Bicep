@@ -36,16 +36,5 @@
         }
       }
     }
-  },
-  "formatting": {
-      "width": 80,
-      "indentation": "space",
-      "indentationSize": 2,
-      "insertSpaces": true,
-      "newlineKind": "LF",
-      "ensureNewlineAtEndOfFile": true,
-      "trimTrailingWhitespace": true,
-      "trimFinalNewlines": true,
-      "insertFinalNewline": true
-    }
+  }
 }
