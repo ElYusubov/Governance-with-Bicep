@@ -15,8 +15,8 @@ resource policyDef 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
   properties: {
     policyType: 'Custom'
     mode: 'Indexed'
-    displayName: 'Audit storage account anonymous blob access and account key access'
-    description: 'Ensures storage accounts do not allow anonymous blob access and do not permit shared key access.'
+    displayName: 'Audit storage account access and minimum TLS version'
+    description: 'Ensures storage accounts do not allow anonymous blob access, do not permit shared key access, and require TLS 1.2.'
     metadata: {
       category: 'Storage'
     }
@@ -37,6 +37,10 @@ resource policyDef 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
                 field: 'Microsoft.Storage/storageAccounts/allowSharedKeyAccess'
                 equals: true
               }
+              {
+                field: 'Microsoft.Storage/storageAccounts/minimumTlsVersion'
+                notEquals: 'TLS1_2'
+              }
             ]
           }
         ]
@@ -51,7 +55,7 @@ resource policyDef 'Microsoft.Authorization/policyDefinitions@2021-06-01' = {
 resource assignment 'Microsoft.Authorization/policyAssignments@2022-06-01' = {
   name: assignmentName
   properties: {
-    displayName: 'Audit storage account anonymous blob access and account key access'
+    displayName: 'Audit storage account access and minimum TLS version'
     policyDefinitionId: policyDef.id
   }
 }

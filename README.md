@@ -17,8 +17,9 @@ infra/
       require-tag.bicep
       allowed-locations.bicep
       allowed-vm-skus.bicep
+      storage-access-controls.bicep
       storage-diagnostics.bicep
-      storage-param.bicep
+    storage-param.bicep
   params/
     sub.dev.json
   samples/
@@ -52,7 +53,7 @@ az policy state summarize
 ## Demonstration Flow
 1. **Audit** mode: create a non-compliant resource (missing required tag) → allowed but flagged
 2. Flip module **`effect`** param to `deny` and redeploy → non-compliance is blocked
-3. **Extended:** Allowed VM SKUs & Storage Diagnostics (audit-first → enforce)
+3. **Extended:** Allowed VM SKUs, storage access controls, and Storage Diagnostics (audit-first → enforce)
 
 ## Workflows
 - **PR Validate**: build Bicep, run `what-if`, snapshot policy compliance
@@ -66,6 +67,11 @@ az policy state summarize
 ### Allowed VM SKUs
 - Module: `infra/modules/policy/allowed-vm-skus.bicep`
 - Start with `effect: 'audit'`, then switch to `deny` to block disallowed sizes.
+
+### Storage Access Controls
+- Module: `infra/modules/policy/storage-access-controls.bicep`
+- Audits Storage accounts that allow anonymous blob access, shared key access, or a minimum TLS version below `TLS1_2`.
+- The module is enabled from `infra/main.bicep` with `effect: 'audit'`. Change it to `deny` only after confirming applications use TLS 1.2 and do not depend on anonymous access or account keys.
 
 ### Storage Diagnostics to Log Analytics
 - Module: `infra/modules/policy/storage-diagnostics.bicep`
