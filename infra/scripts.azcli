@@ -1,4 +1,5 @@
 # Login to Azure
+
 az login --use-device-code
 az account show --query name
 
@@ -8,7 +9,7 @@ az group list -o table
 
 
 # Create the resource group and list them in a view
-az group create -n 'm365dc-bicep-demo' -l 'eastus2'  
+az group create -n 'azureug-policy-demo' -l 'eastus2' 
 az group list -o table
 
 # Demo-1 Deploying a storage account with don't delete lock enabled

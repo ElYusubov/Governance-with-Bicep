@@ -1,5 +1,40 @@
-
 {
-  "format": { "indentation": 2 },
-  "analyzers": { "core": { "enabled": true, "verbose": false } }
+  "format": {
+    "indentation": 2
+  },
+  "analyzers": {
+    "core": {
+      "enabled": true,
+      "verbose": true,
+      "rules": {
+        "no-hardcoded-env-urls": {
+          "level": "warning"
+        },
+        "no-unused-params": {
+          "level": "warning"
+        },
+        "no-unused-vars": {
+          "level": "info"
+        },
+        "no-unused-existing-resources": {
+          "level": "warning"
+        },
+        "prefer-interpolation": {
+          "level": "warning"
+        },
+        "secure-parameter-default": {
+          "level": "error"
+        },
+        "simplify-interpolation": {
+          "level": "warning"
+        },
+        "adminusername-should-not-be-literal": {
+          "level": "warning"
+        },
+        "use-stable-vm-image": {
+          "level": "warning"
+        }
+      }
+    }
+  }
 }
