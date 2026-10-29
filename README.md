@@ -3,6 +3,13 @@
 A beginner-friendly starter for **Azure Policy as Code**. You write governance rules ("policies") in **Bicep**, preview them, and deploy them to an Azure subscription, locally or through **GitHub Actions**.
 
 > **New to this?** A *policy* is a rule such as "every resource must have an `Environment` tag". Policies start in **audit** mode (they only report violations) and can later be switched to **deny** (they block violations). Nothing is blocked until you choose to.
+>
+> **Use a sandbox subscription** while learning. Deny-mode policies affect everyone deploying to it.
+
+## Start here
+1. [Concepts](docs/concepts.md): the ideas in five minutes ([glossary](docs/glossary.md))
+2. [Hands-on labs](docs/labs/README.md): learn by doing
+3. [FAQ](docs/faq.md) and [troubleshooting](docs/troubleshooting.md): when you're stuck
 
 ## What you get
 
@@ -47,7 +54,7 @@ Each policy has its own effect parameter, so you can enforce them one at a time:
 | `allowedVmSkusEffect` | `Audit`, `Deny` (capitalized on purpose) |
 | `storageDiagnosticsEffect` | `auditIfNotExists`, `deployIfNotExists` |
 
-`infra/params/sub.prod.json` is an example with enforcing effects. Review it before use.
+`infra/params/sub.prod.json` is an example with enforcing effects. **Review it before use**; see [params/README](infra/params/README.md).
 
 ## Learn by doing
 Follow the [hands-on labs](docs/labs/README.md) (bash and PowerShell). They take you from first deployment to CI/CD and cleanup. Stuck? See [troubleshooting](docs/troubleshooting.md).

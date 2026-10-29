@@ -21,4 +21,4 @@ Key terms:
 - **Effect**: what happens on a violation: `audit` reports it, `deny` blocks it.
 - **Compliance**: the report of which resources follow the rules.
 
-Stuck? See [troubleshooting](../troubleshooting.md).
+Stuck? See [troubleshooting](../troubleshooting.md) or the [FAQ](../faq.md). New terms are in the [glossary](../glossary.md); the big picture is in [concepts](../concepts.md).
