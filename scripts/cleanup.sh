@@ -18,7 +18,7 @@ for p in "${POLICIES[@]}"; do
   az policy definition delete --name "$p" 2>/dev/null && echo "Deleted definition $p"
 done
 
-for g in $(az group list --query "[?starts_with(name,'$RG')].name" -o tsv); do
+for g in $(az group list --query "[?starts_with(name, '$RG')].name" -o tsv); do
   # CanNotDelete locks must be removed first
   for id in $(az lock list -g "$g" --query "[].id" -o tsv); do az lock delete --ids "$id"; done
   az group delete -n "$g" --yes --no-wait && echo "Deleting resource group $g"

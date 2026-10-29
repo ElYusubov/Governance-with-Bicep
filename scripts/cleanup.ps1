@@ -16,7 +16,7 @@ foreach ($p in $policies) {
   if ($LASTEXITCODE -eq 0) { Write-Host "Deleted definition $p" }
 }
 
-foreach ($g in (az group list --query "[?starts_with(name,'$rg')].name" -o tsv)) {
+foreach ($g in (az group list --query "[?starts_with(name, '$rg')].name" -o tsv)) {
   # CanNotDelete locks must be removed first
   foreach ($id in (az lock list -g $g --query "[].id" -o tsv)) { az lock delete --ids $id }
   az group delete -n $g --yes --no-wait

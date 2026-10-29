@@ -17,8 +17,8 @@ Add `-y` (bash) or `-Yes` (PowerShell) to skip the confirmation.
 
 ## 2. Verify
 ```bash
-az policy assignment list --query "[?ends_with(name,'-assignment')].name" -o tsv
-az group list --query "[?starts_with(name,'rg-governance-lab')].name" -o tsv
+az policy assignment list --query "[?ends_with(name, '-assignment')].name" -o tsv
+az group list --query "[?starts_with(name, 'rg-governance-lab')].name" -o tsv
 ```
 
 Both should be empty (resource groups may take a few minutes to disappear).
