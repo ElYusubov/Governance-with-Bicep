@@ -62,7 +62,7 @@ jobs:
         run: az policy state summarize --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }} | tee compliance.json
 
       - name: Upload results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pr-validation
           path: |
