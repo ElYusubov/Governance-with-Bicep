@@ -1,4 +1,7 @@
-// 3-deploy-storage-w-Lock.bicep
+// deploy-test-storage-with-lock.bicep
+// Learning sample: creates a resource group plus a storage account protected by a
+// CanNotDelete lock, so you have something to test the policies against.
+// Remove the lock before deleting it: see docs/labs/07-clean-up.md.
 
 // Deployment scope: subscription
 targetScope = 'subscription'

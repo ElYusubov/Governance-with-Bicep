@@ -49,13 +49,26 @@ Each policy has its own effect parameter, so you can enforce them one at a time:
 
 `infra/params/sub.prod.json` is an example with enforcing effects. Review it before use.
 
+## Learn by doing
+Follow the [hands-on labs](docs/labs/README.md) (bash and PowerShell). They take you from first deployment to CI/CD and cleanup. Stuck? See [troubleshooting](docs/troubleshooting.md).
+
+Helper scripts in `scripts/`:
+
+| Script (`.sh` / `.ps1`) | Purpose |
+|---|---|
+| `setup-oidc` | Creates the Azure identity, secrets, and `platform` environment for GitHub Actions |
+| `test-noncompliant` | Creates a deliberately non-compliant resource (`tag`, `storage`, or `location`) |
+| `cleanup` | Removes the lab policies, locks, and resource groups |
+
 ## Repo layout
 ```
 infra/
   main.bicep               Entry point: wires all policies together
-  modules/policy/          One Bicep module per policy
-  modules/storage-param.bicep, samples/   Extra storage examples (not part of the policy deployment)
+  modules/policy/          One Bicep module per policy (see modules/README.md)
+  modules/storage-param.bicep, samples/   Test resources for the labs, not part of the policy deployment
   params/                  sub.dev.json (audit) and sub.prod.json (enforce)
+docs/                      Labs and troubleshooting
+scripts/                   Helper scripts
 .github/workflows/         pr-validate.yml and release-deploy.yml
 .bicepconfig.json          Bicep linter rules
 ```
@@ -73,13 +86,11 @@ Use `auditIfNotExists` first, then `deployIfNotExists` to create diagnostic sett
 - **PR Validate**: lints Bicep, runs security scans, runs `what-if`, and saves a compliance snapshot.
 - **Release Deploy**: deploys to the subscription when `infra/**` changes on `main`, using the `platform` environment.
 
-Both authenticate with **OIDC**, so there are no stored passwords. Create an Entra app registration with a federated credential for this repo, then add these repository secrets: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`. See [Azure's OIDC guide](https://learn.microsoft.com/azure/developer/github/connect-from-azure-openid-connect).
+Both authenticate with **OIDC**, so there are no stored passwords. Run `scripts/setup-oidc.sh <owner/repo>` (or `setup-oidc.ps1 -Repo <owner/repo>`) to create the Entra app registration, federated credentials, repository secrets (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`), and the `platform` environment. Details: [Lab 06](docs/labs/06-ci-cd-with-oidc.md).
 
 ## Clean up
 ```bash
-az policy assignment list --query "[].name" -o tsv      # find assignments ending in -assignment
-az policy assignment delete --name <NAME>
-az policy definition delete --name <NAME>
+scripts/cleanup.sh      # or scripts/cleanup.ps1
 ```
 
 ## Good to know
