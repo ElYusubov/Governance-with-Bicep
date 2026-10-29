@@ -1,105 +1,125 @@
 # Governance-with-Bicep
 
-A beginner-friendly starter for **Azure Policy as Code**. You write governance rules ("policies") in **Bicep**, preview them, and deploy them to an Azure subscription, locally or through **GitHub Actions**.
+**Learn Azure Policy as Code, hands-on.** Write governance rules in **Bicep**, test them safely, and ship them with **GitHub Actions**. No prior policy experience needed.
 
-> **New to this?** A *policy* is a rule such as "every resource must have an `Environment` tag". Policies start in **audit** mode (they only report violations) and can later be switched to **deny** (they block violations). Nothing is blocked until you choose to.
->
-> **Use a sandbox subscription** while learning. Deny-mode policies affect everyone deploying to it.
+> **Use a sandbox subscription.** Policies in `deny` mode can block real deployments. Everything here starts in safe `audit` mode and is removed by the last lab.
 
-## Start here
-1. [Concepts](docs/concepts.md): the ideas in five minutes ([glossary](docs/glossary.md))
-2. [Hands-on labs](docs/labs/README.md): learn by doing
-3. [FAQ](docs/faq.md) and [troubleshooting](docs/troubleshooting.md): when you're stuck
+## What is this, in 30 seconds?
 
-## What you get
+```mermaid
+flowchart LR
+  A["📝 You write a rule<br/>(Bicep)"] --> B["☁️ Azure checks<br/>your resources"]
+  B --> C{"Resource<br/>follows the rule?"}
+  C -- Yes --> D["✅ Compliant"]
+  C -- No, audit mode --> E["⚠️ Allowed, but flagged"]
+  C -- No, deny mode --> F["⛔ Blocked"]
+```
 
-| Policy | What it checks |
-|---|---|
-| `require-tag` | Resources have an `Environment` tag |
-| `allowed-locations` | Resources are only in approved regions |
-| `allowed-vm-skus` | Only approved VM sizes are used |
-| `storage-access-controls` | Storage accounts block anonymous access and shared keys, and require TLS 1.2 |
-| `storage-diagnostics` *(optional)* | Storage accounts send logs to Log Analytics |
+Example rule: *"Every resource must have an `Environment` tag."*
+
+## Your learning path
+
+```mermaid
+flowchart LR
+  S["Start here<br/>Concepts"] --> L0["Lab 00<br/>Setup"]
+  L0 --> L1["Lab 01<br/>First policy"]
+  L1 --> L2["Lab 02<br/>Audit → Deny"]
+  L2 --> L3["Lab 03<br/>Locations & VMs"]
+  L3 --> L4["Lab 04<br/>Storage security"]
+  L4 --> L5["Lab 05<br/>Auto-remediation"]
+  L5 --> L6["Lab 06<br/>CI/CD & OIDC"]
+  L6 --> L7["Lab 07<br/>Clean up"]
+```
+
+| Level | Lab | You will | Time |
+|---|---|---|---|
+| 🟢 Beginner | [00 Setup](docs/labs/00-setup.md) | Install tools, sign in | 10 min |
+| 🟢 Beginner | [01 First policy](docs/labs/01-first-policy.md) | Deploy in audit mode, see a violation | 15 min |
+| 🟢 Beginner | [02 Audit to deny](docs/labs/02-audit-to-deny.md) | Block a bad resource | 15 min |
+| 🟡 Intermediate | [03 Locations and VM sizes](docs/labs/03-locations-and-vm-skus.md) | Test two allowlist policies | 15 min |
+| 🟡 Intermediate | [04 Storage security](docs/labs/04-storage-security.md) | Catch insecure storage accounts | 15 min |
+| 🟡 Intermediate | [05 Auto-remediation](docs/labs/05-remediation.md) | Let Azure fix things for you | 20 min |
+| 🔴 Advanced | [06 CI/CD with OIDC](docs/labs/06-ci-cd-with-oidc.md) | Validate and deploy from GitHub | 20 min |
+| 🧹 Wrap-up | [07 Clean up](docs/labs/07-clean-up.md) | Remove everything | 5 min |
+
+**New here?** Read [Concepts](docs/concepts.md) first. **Stuck?** [Troubleshooting](docs/troubleshooting.md) · [FAQ](docs/faq.md) · [Glossary](docs/glossary.md)
 
 ## Prerequisites
-- An Azure subscription where you can create policies (Owner or Resource Policy Contributor)
-- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) (it includes Bicep support: `az bicep install`)
-- Optional: a GitHub repo with the secrets listed under [Automated deployment](#automated-deployment-github-actions)
+- An Azure subscription where you can create policies (Owner, or Resource Policy Contributor)
+- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) with Bicep (`az bicep install`)
+- Optional for Lab 06: a GitHub account and the [GitHub CLI](https://cli.github.com/)
 
-## Quick start (5 minutes)
+## Try it in 5 minutes
 ```bash
 az login
 az account set --subscription <SUB_ID>
 
-# 1. Preview what will be created (changes nothing)
-az deployment sub what-if --template-file infra/main.bicep --parameters infra/params/sub.dev.json --location eastus2
-
-# 2. Deploy (everything starts in audit mode)
-az deployment sub create --template-file infra/main.bicep --parameters infra/params/sub.dev.json --location eastus2
-
-# 3. Check compliance (results can take up to 30 minutes to appear)
-az policy state summarize
+az deployment sub what-if --location eastus2 --template-file infra/main.bicep --parameters infra/params/sub.dev.json   # preview only
+az deployment sub create  --location eastus2 --template-file infra/main.bicep --parameters infra/params/sub.dev.json   # deploy (audit mode)
+az policy state summarize                                                                                              # results can take up to 30 min
 ```
 
-## Try it: audit, then deny
-1. Deploy as above. Create a resource without an `Environment` tag. It succeeds but is reported as non-compliant.
-2. In `infra/params/sub.dev.json`, set `requireTagEffect` to `deny` and redeploy.
-3. Create an untagged resource again. Azure now blocks it.
+## How the repo works
 
-Each policy has its own effect parameter, so you can enforce them one at a time:
+```mermaid
+flowchart TB
+  P["infra/params/sub.dev.json<br/>choose effects"] --> M["infra/main.bicep<br/>entry point"]
+  M --> A["require-tag"]
+  M --> B["allowed-locations"]
+  M --> C["allowed-vm-skus"]
+  M --> D["storage-access-controls"]
+  M -. optional .-> E["storage-diagnostics"]
+  A & B & C & D & E --> R["Policy definition + assignment<br/>on your subscription"]
+```
 
-| Parameter | Allowed values |
+| Folder | What's inside |
 |---|---|
-| `requireTagEffect`, `allowedLocationsEffect`, `storageAccessControlsEffect` | `audit`, `deny` |
-| `allowedVmSkusEffect` | `Audit`, `Deny` (capitalized on purpose) |
-| `storageDiagnosticsEffect` | `auditIfNotExists`, `deployIfNotExists` |
+| `infra/` | `main.bicep`, one module per policy, parameter files, sample test resources |
+| `docs/` | [Concepts](docs/concepts.md), [labs](docs/labs/README.md), FAQ, glossary, troubleshooting |
+| `scripts/` | `setup-oidc`, `test-noncompliant`, `cleanup` (each as `.sh` and `.ps1`) |
+| `.github/workflows/` | PR validation and release deployment |
 
-`infra/params/sub.prod.json` is an example with enforcing effects. **Review it before use**; see [params/README](infra/params/README.md).
+## The policies
 
-## Learn by doing
-Follow the [hands-on labs](docs/labs/README.md) (bash and PowerShell). They take you from first deployment to CI/CD and cleanup. Stuck? See [troubleshooting](docs/troubleshooting.md).
+| Policy | What it checks | Effect parameter |
+|---|---|---|
+| `require-tag` | Has an `Environment` tag | `requireTagEffect` |
+| `allowed-locations` | Only approved regions | `allowedLocationsEffect` |
+| `allowed-vm-skus` | Only approved VM sizes | `allowedVmSkusEffect` |
+| `storage-access-controls` | No anonymous access or shared keys, TLS 1.2+ | `storageAccessControlsEffect` |
+| `storage-diagnostics` *(optional)* | Logs go to Log Analytics | `storageDiagnosticsEffect` |
 
-Helper scripts in `scripts/`:
+Safe rollout for any policy:
 
-| Script (`.sh` / `.ps1`) | Purpose |
-|---|---|
-| `setup-oidc` | Creates the Azure identity, secrets, and `platform` environment for GitHub Actions |
-| `test-noncompliant` | Creates a deliberately non-compliant resource (`tag`, `storage`, or `location`) |
-| `cleanup` | Removes the lab policies, locks, and resource groups |
-
-## Repo layout
-```
-infra/
-  main.bicep               Entry point: wires all policies together
-  modules/policy/          One Bicep module per policy (see modules/README.md)
-  modules/storage-param.bicep, samples/   Test resources for the labs, not part of the policy deployment
-  params/                  sub.dev.json (audit) and sub.prod.json (enforce)
-docs/                      Labs and troubleshooting
-scripts/                   Helper scripts
-.github/workflows/         pr-validate.yml and release-deploy.yml
-.bicepconfig.json          Bicep linter rules
+```mermaid
+flowchart LR
+  A["1. Deploy in audit"] --> B["2. Review compliance"]
+  B --> C["3. Fix or exempt<br/>non-compliant resources"]
+  C --> D["4. Switch to deny"]
 ```
 
-## Optional: storage diagnostics
-Set `logAnalyticsWorkspaceId` in `infra/params/sub.dev.json` to a Log Analytics workspace resource ID. The policy is skipped while it is empty.
+Details and allowed values: [infra/modules/README.md](infra/modules/README.md). `sub.prod.json` enforces everything, so read [infra/params/README.md](infra/params/README.md) first.
 
-```bash
-az monitor log-analytics workspace create -g <RG> -n <LAW_NAME> -l eastus
-az monitor log-analytics workspace show -g <RG> -n <LAW_NAME> --query id -o tsv
+## Automated deployment
+
+```mermaid
+flowchart LR
+  PR["Open a pull request"] --> V["PR Validate<br/>lint · scan · what-if"]
+  V --> M["Merge to main"]
+  M --> D["Release Deploy<br/>(platform environment)"]
+  D --> S["Compliance snapshot"]
 ```
-Use `auditIfNotExists` first, then `deployIfNotExists` to create diagnostic settings automatically.
 
-## Automated deployment (GitHub Actions)
-- **PR Validate**: lints Bicep, runs security scans, runs `what-if`, and saves a compliance snapshot.
-- **Release Deploy**: deploys to the subscription when `infra/**` changes on `main`, using the `platform` environment.
-
-Both authenticate with **OIDC**, so there are no stored passwords. Run `scripts/setup-oidc.sh <owner/repo>` (or `setup-oidc.ps1 -Repo <owner/repo>`) to create the Entra app registration, federated credentials, repository secrets (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`), and the `platform` environment. Details: [Lab 06](docs/labs/06-ci-cd-with-oidc.md).
+GitHub signs in to Azure with **OIDC** (a short-lived token, no stored password). Run `scripts/setup-oidc.sh <owner/repo>` (or `setup-oidc.ps1 -Repo <owner/repo>`) to set it up. Details: [Lab 06](docs/labs/06-ci-cd-with-oidc.md).
 
 ## Clean up
 ```bash
 scripts/cleanup.sh      # or scripts/cleanup.ps1
 ```
 
+## Contributing
+Found a confusing step? [Open an issue](../../issues/new/choose) or read [CONTRIBUTING](CONTRIBUTING.md).
+
 ## Good to know
-- Everything deploys at **subscription** scope. For production, consider management groups and policy initiatives.
+- Everything deploys at **subscription** scope. For production, consider management groups and initiatives.
 - Changing a policy's `policyName` creates a new definition and leaves the old one behind.

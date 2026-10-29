@@ -2,6 +2,13 @@
 
 **Goal:** make the tag policy block non-compliant resources.
 
+```mermaid
+flowchart LR
+  A["Audit<br/>(Lab 01)"] -- "redeploy with<br/>requireTagEffect=deny" --> B["Deny"]
+  B --> C["Untagged resource<br/>⛔ blocked"]
+  B --> D["Tagged resource<br/>✅ allowed"]
+```
+
 ## 1. Switch the effect
 Override one parameter on the command line (no file edit needed):
 

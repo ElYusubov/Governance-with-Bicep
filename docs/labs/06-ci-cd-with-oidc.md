@@ -4,6 +4,13 @@
 
 **OIDC** means GitHub proves its identity to Azure with a short-lived token, so you never store a secret key.
 
+```mermaid
+flowchart LR
+  F["Fork"] --> S["Run setup-oidc script"]
+  S --> PR["Open PR → PR Validate"]
+  PR --> M["Merge → Release Deploy"]
+```
+
 ## 1. Fork the repo
 Fork on GitHub, then clone your fork. Sign in with `az login` and `gh auth login`.
 

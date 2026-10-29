@@ -4,6 +4,16 @@
 
 Effects: `auditIfNotExists` only reports a missing setting. `deployIfNotExists` creates it, using a managed identity.
 
+```mermaid
+flowchart LR
+  S["New storage account"] --> P{"Has diagnostic setting?"}
+  P -- Yes --> OK["✅ Compliant"]
+  P -- No --> E{"Effect"}
+  E -- auditIfNotExists --> F["⚠️ Flagged"]
+  E -- deployIfNotExists --> M["🔧 Policy creates setting<br/>(managed identity)"]
+  M --> L["Logs flow to Log Analytics"]
+```
+
 > A Log Analytics workspace has a small cost. Lab 07 deletes it.
 
 ## 1. Create a workspace
