@@ -33,6 +33,15 @@
         },
         "use-stable-vm-image": {
           "level": "warning"
+        },
+        "use-recent-api-versions": {
+          "level": "warning"
+        },
+        "no-unnecessary-metadata": {
+          "level": "warning"
+        },
+        "explicit-values-for-loc-params": {
+          "level": "warning"
         }
       }
     }

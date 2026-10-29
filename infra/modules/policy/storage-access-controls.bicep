@@ -56,6 +56,8 @@ resource assignment 'Microsoft.Authorization/policyAssignments@2022-06-01' = {
   name: assignmentName
   properties: {
     displayName: 'Audit storage account access and minimum TLS version'
+    description: 'Assignment of ${policyName} with effect ${effect}.'
     policyDefinitionId: policyDef.id
+    enforcementMode: 'Default'
   }
 }

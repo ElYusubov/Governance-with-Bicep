@@ -99,7 +99,9 @@ resource assignment 'Microsoft.Authorization/policyAssignments@2022-06-01' = {
   }
   properties: {
     displayName: 'Storage diagnostics to Log Analytics (assignment)'
+    description: 'Assignment of ${policyName} with effect ${effect}.'
     policyDefinitionId: policyDef.id
+    enforcementMode: 'Default'
     parameters: { workspaceId: { value: logAnalyticsWorkspaceId }, diagName: { value: diagnosticSettingName } }
   }
 }
