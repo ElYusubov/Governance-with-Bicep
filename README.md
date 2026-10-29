@@ -118,7 +118,7 @@ scripts/cleanup.sh      # or scripts/cleanup.ps1
 ```
 
 ## Contributing
-Found a confusing step? [Open an issue](../../issues/new/choose) or read [CONTRIBUTING](CONTRIBUTING.md).
+Found a confusing step? [Open an issue](https://github.com/ElYusubov/Governance-with-Bicep/issues/new/choose) or read [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Good to know
 - Everything deploys at **subscription** scope. For production, consider management groups and initiatives.
