@@ -31,6 +31,8 @@ resource assignment 'Microsoft.Authorization/policyAssignments@2022-06-01' = {
   name: assignmentName
   properties: {
     displayName: 'Allowed locations (assignment)'
+    description: 'Assignment of ${policyName} with effect ${effect}.'
     policyDefinitionId: policyDef.id
+    enforcementMode: 'Default'
   }
 }

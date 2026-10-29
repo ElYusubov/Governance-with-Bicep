@@ -32,6 +32,7 @@ resource assignment 'Microsoft.Authorization/policyAssignments@2022-06-01' = {
   name: assignmentName
   properties: {
     displayName: 'Require or audit tag: ${tagName} (assignment)'
+    description: 'Assignment of ${policyName} with effect ${effect}.'
     policyDefinitionId: policyDef.id
     enforcementMode: 'Default'
   }

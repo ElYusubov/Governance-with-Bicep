@@ -4,13 +4,43 @@ on:
   pull_request:
     paths:
       - 'infra/**'
+      - '.bicepconfig.json'
 
 permissions:
   id-token: write
   contents: read
 
+concurrency:
+  group: pr-validate-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bicep lint and build
+        run: |
+          az bicep build --file infra/main.bicep --stdout > /dev/null
+          for f in infra/modules/policy/*.bicep; do az bicep lint --file "$f"; done
+
+      - name: PSRule for Azure
+        uses: microsoft/ps-rule@v2.9.0
+        with:
+          modules: PSRule.Rules.Azure
+          inputPath: infra/
+        continue-on-error: true
+
+      - name: Checkov IaC scan
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: infra
+          framework: bicep
+          soft_fail: true
+
   validate:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,12 +53,18 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Bicep compile (sanity + linter)
-        run: az bicep build --file infra/main.bicep
-
       - name: What-If (subscription deployment)
         run: |
-          az deployment sub what-if --template-file infra/main.bicep --location eastus2
+          az deployment sub what-if --template-file infra/main.bicep \
+            --parameters infra/params/sub.dev.json --location eastus2 | tee whatif.txt
 
       - name: Compliance snapshot
-        run: az policy state summarize --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: az policy state summarize --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }} | tee compliance.json
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-validation
+          path: |
+            whatif.txt
+            compliance.json

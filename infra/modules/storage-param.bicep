@@ -1,4 +1,6 @@
 // storage-param.bicep
+// Learning sample module (not part of the policy deployment): a storage account with a
+// CanNotDelete lock, used by infra/samples/deploy-test-storage-with-lock.bicep.
 
 @description('The prefix that will appear infront of storage account name.')
 @allowed([
